@@ -1,0 +1,23 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    const int MAX_SIZE = 100;
+    int numbers[MAX_SIZE], totalCount, index, total = 0, expectedSum = 0;
+
+    cout << "Enter the count of numbers: ";
+    cin >> totalCount;
+
+    for (index = 0; index < totalCount; index++) {
+        cin >> numbers[index];
+        total += numbers[index];
+    }
+
+    for (index = 1; index <= totalCount + 1; index++) {
+        expectedSum += index;
+    }
+
+    cout << "The missing number is: " << expectedSum - total << endl;
+
+    return 0;
+}
