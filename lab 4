@@ -1,0 +1,36 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+string encrypt(string text, int shift) {
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = islower(text[i]) ? 'a' : 'A';
+            text[i] = (text[i] - base + shift) % 26 + base;
+        }
+    }
+    return text;
+}
+
+string decrypt(string text, int shift) {
+    return encrypt(text, 26 - shift); 
+}
+
+int main() {
+    string text;
+    int shift;
+
+    cout << "Enter text: ";
+    getline(cin, text);
+    cout << "Enter shift value: ";
+    cin >> shift;
+
+    string encryptedText = encrypt(text, shift);
+    string decryptedText = decrypt(encryptedText, shift);
+
+    cout << "Encrypted: " << encryptedText << endl;
+    cout << "Decrypted: " << decryptedText << endl;
+
+    return 0;
+}
