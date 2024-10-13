@@ -1,0 +1,39 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<string> splitIntoColumns(const string& sentence, int cols) {
+    vector<string> matrix(cols, "");
+    for (int i = 0; i < sentence.length(); i++) {
+        matrix[i % cols] += sentence[i];
+    }
+    return matrix;
+}
+
+string encodeByRows(const vector<string>& matrix) {
+    string encoded = "";
+    for (const string& row : matrix) {
+        encoded += row;
+    }
+    return encoded;
+}
+
+int main() {
+    string sentence;
+    int cols;
+
+    cout << "Enter sentence: ";
+    getline(cin, sentence);
+    cout << "Enter number of columns: ";
+    cin >> cols;
+
+    vector<string> matrix = splitIntoColumns(sentence, cols);
+
+    string encodedSentence = encodeByRows(matrix);
+
+    cout << "Encoded sentence: " << encodedSentence << endl;
+
+    return 0;
+}
