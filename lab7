@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+
+std::string replaceCharacters(const std::string& text, char oldChar, char newChar) {
+    std::string result = text;
+
+    for (size_t i = 0; i < result.length(); ++i) {
+        if (result[i] == oldChar) {
+            result[i] = newChar;
+        }
+    }
+    return result;
+}
+
+int main() {
+    std::string sentence;
+    std::cout << "Enter the sentence: ";
+    std::getline(std::cin, sentence);
+
+    char charToReplace, newChar;
+
+    std::cout << "Enter the character to replace: ";
+    std::cin >> charToReplace;
+    std::cout << "Enter the new character: ";
+    std::cin >> newChar;
+
+    sentence = replaceCharacters(sentence, charToReplace, newChar);
+
+    std::cout << "Modified sentence: " << sentence << std::endl;
+
+    return 0;
+}
