@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string caesarCipher(const string& text, int shift) {
+    string result = "";
+    for (char ch : text) {
+        if (isalpha(ch)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            result += (ch - base + shift) % 26 + base;
+        } else {
+            result += ch;
+        }
+    }
+    return result;
+}
+
+vector<string> splitIntoColumns(const string& sentence, int cols) {
+    int rows = (sentence.length() + cols - 1) / cols;
+    vector<string> matrix(rows, string(cols, ' '));
+    int index = 0;
+    
+    for (int i = 0; i < rows && index < sentence.length(); i++) {
+        for (int j = 0; j < cols && index < sentence.length(); j++) {
+            matrix[i][j] = sentence[index++];
+        }
+    }
+    
+    return matrix;
+}
+
+void displayMatrix(const vector<string>& matrix) {
+    cout << "Matrix:" << endl;
+    for (const string& row : matrix) {
+        for (char elem : row) {
+            cout << elem << ' ';
+        }
+        cout << endl;
+    }
+}
+
+string encodeByColumns(const vector<string>& matrix, int cols) {
+    string encoded = "";
+    for (int j = 0; j < cols; j++) {
+        for (const string& row : matrix) {
+            if (j < row.size()) {
+                encoded += row[j];
+            }
+        }
+    }
+    return encoded;
+}
+
+int main() {
+    string sentence;
+    int cols, shift;
+
+    cout << "Naxadasutyun: ";
+    getline(cin, sentence);
+    cout << "Enter Caesar shift: ";
+    cin >> shift;
+    cout << "Enter number of columns: ";
+    cin >> cols;
+
+    string caesarEncoded = caesarCipher(sentence, shift);
+    vector<string> matrix = splitIntoColumns(caesarEncoded, cols);
+
+    displayMatrix(matrix);
+
+    string columnEncodedSentence = encodeByColumns(matrix, cols);
+    cout << "Encoded sentence by columns: " << columnEncodedSentence << endl;
+
+    return 0;
+}
