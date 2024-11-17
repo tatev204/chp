@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+#include <tuple>
+#include <string>
+
+using namespace std;
+
+vector<tuple<int, int, char>> lz77_compress(const string& input_string, int window_size = 10, int lookahead_size = 6) {
+    int i = 0;
+    vector<tuple<int, int, char>> compressed_data;
+
+    while (i < input_string.length()) {
+        int match_offset = 0;
+        int match_length = 0;
+
+        int window_start = max(0, i - window_size);
+        int lookahead_end = min(i + lookahead_size, (int)input_string.length());
+
+        for (int j = window_start; j < i; j++) {
+            int length = 0;
+            while (length < (lookahead_end - i) && input_string[i + length] == input_string[j + length]) {
+                length++;
+            }
+
+            if (length > match_length) {
+                match_offset = i - j;
+                match_length = length;
+            }
+        }
+
+        if (match_length > 0) {
+            compressed_data.push_back(make_tuple(match_offset, match_length, '\0'));
+            i += match_length;
+        } else {
+            compressed_data.push_back(make_tuple(0, 0, input_string[i]));
+            i++;
+        }
+    }
+
+    return compressed_data;
+}
+
+string lz77_decompress(const vector<tuple<int, int, char>>& compressed_data) {
+    string decompressed_string;
+
+    for (const auto& item : compressed_data) {
+        int offset, length;
+        char ch;
+        tie(offset, length, ch) = item;
+
+        if (length > 0) {
+            decompressed_string += decompressed_string.substr(decompressed_string.length() - offset, length);
+        } else {
+            decompressed_string += ch;
+        }
+    }
+
+    return decompressed_string;
+}
+
+int main() {
+    string input_string = "ASASASASAS";
+    auto compressed_data = lz77_compress(input_string);
+    string decompressed_string = lz77_decompress(compressed_data);
+
+    cout << "Input String: " << input_string << endl;
+    cout << "Compressed Data: ";
+    for (const auto& item : compressed_data) {
+        int offset, length;
+        char ch;
+        tie(offset, length, ch) = item;
+        if (length > 0) {
+            cout << "(" << offset << ", " << length << "), ";
+        } else {
+            cout << "(" << offset << ", " << length << ", '" << ch << "'), ";
+        }
+    }
+    cout << endl;
+
+    cout << "Decompressed String: " << decompressed_string << endl;
+
+    return 0;
+}
