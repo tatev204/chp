@@ -1,0 +1,50 @@
+import socket
+import threading  
+
+# server
+def start_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind(('localhost', 12345))
+    server_socket.listen(1)  
+
+    print("Server is listening...")
+
+    while True:
+        client_socket, client_address = server_socket.accept()
+        print(f"Connected to {client_address}")
+        
+        # texekutyan poxancum 
+        message = client_socket.recv(1024).decode()
+        print(f"Received from client: {message}")
+
+        
+        server_response = f"Server received: {message}"
+        client_socket.send(server_response.encode())
+
+        client_socket.close()  #kapy pakel
+
+# klient
+def start_client():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect(('localhost', 12345))
+
+    message = input("Enter a message to send to the server: ")
+
+    client_socket.send(message.encode())  # message uxarkum enq server
+
+    # stanum u tpum enq
+    server_response = client_socket.recv(1024).decode()
+    print(f"Received from server: {server_response}")
+
+    client_socket.close()  # kapy verjacnum enq
+
+# klient u servery miaj
+def main():
+    server_thread = threading.Thread(target=start_server)
+    server_thread.start()
+
+    client_thread = threading.Thread(target=start_client)
+    client_thread.start()
+
+if __name__ == "__main__":
+    main()
