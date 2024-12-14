@@ -1,0 +1,40 @@
+import threading
+import time
+
+# popoxakanner
+globlint = 0
+quitnow = False
+
+
+thread_lock = threading.Lock()
+
+def async_thread():
+    global globlint, quitnow
+    while not quitnow:
+        with thread_lock:  
+            globlint += 1
+            if globlint > 100:
+                quitnow = True
+            print(f"MyAsyncSimpleThread: {globlint}")
+        time.sleep(1)  
+
+def main():
+    global globlint, quitnow
+
+    # Thread stexcum
+    recv_thread = threading.Thread(target=async_thread)
+    recv_thread.start()
+
+    while not quitnow:
+        with thread_lock:  
+            globlint += 1
+            if globlint > 5000:
+                quitnow = True
+            print(f"Main loop: {globlint}")
+        time.sleep(0.005)  
+
+    # Thread avart
+    recv_thread.join()
+
+if __name__ == "__main__":
+    main()
